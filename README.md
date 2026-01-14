@@ -1,6 +1,6 @@
 # mawknee
 
-A new Flutter project.
+My new Flutter project.
 
 ## Getting Started
 
