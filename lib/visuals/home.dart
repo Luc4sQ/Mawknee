@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import "package:mawknee/database/databasehandler.dart";
 
 class MyHomePage extends StatefulWidget {
@@ -11,23 +14,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
   FinancialDatabaseConnector dbase =  FinancialDatabaseConnector("test");
-
+  bool loaded = false;
 
   void _incrementCounter() async {
-    setState(() {
-      dbase.insertDummy(_counter);
-      _counter++;
-    });
+
+    await dbase.insertDummy(dbase.length);
+    setState(() {});
+
   }
 
   @override
   Widget build(BuildContext context) {
 
     // init only, if not already initialize
-    dbase.isNull ? dbase.initDatabase : true;
+    dbase.isNull ? dbase.initDatabase().then((notinst) => { setState(() {
+      loaded = true;
+    })}) : 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -42,12 +45,16 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '${dbase.length}',
-              style: Theme.of(context).textTheme.headlineMedium,
+          children: [  
+            const Text('You have pushed the button this many times:'), 
+            
+            loaded ? Text(
+              '${dbase.length}', style: Theme.of(context).textTheme.headlineMedium,
+            ) : LoadingAnimationWidget.staggeredDotsWave(
+              color: Colors.grey,
+              size: 100,
             ),
+
           ],
         ),
       ),

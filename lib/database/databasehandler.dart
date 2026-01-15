@@ -4,11 +4,17 @@ import "package:path/path.dart";
 
 abstract class FinancialDatabase {
   // declare db structure
+  final String tablename = "moneyactivity";
   final String name;
-  final Map<String, String> tablestruct = {
-    "amount": "REAL",
-    "date": "INTEGER",
-    "id": "INTEGER PRIMARY KEY"
+  final List<String> colnames = [
+    "amount",
+    "date",
+    "id"
+  ];
+  late final Map<String, String> tablestruct = {
+    colnames[0]: "REAL",
+    colnames[1]: "INTEGER",
+    colnames[2]: "INTEGER PRIMARY KEY"
   };
 
   String? path;
@@ -24,17 +30,16 @@ class FinancialDatabaseConnector extends FinancialDatabase {
   // the name of the saved file
   FinancialDatabaseConnector(super.name);
 
-  void initDatabase() async {
+  Future<void> initDatabase() async {
     // create path
     path = join(await getDatabasesPath(),"$name.db");
     // create initial query
-    String initQuery = "CREATE TABLE moneyactivity (";
+    String initQuery = "CREATE TABLE $tablename (";
     int tlen = tablestruct.length;
-    List<String> keys = tablestruct.keys.toList();
     for (var i = 0; i < tlen - 1; i++) {
-      initQuery += "${keys[i]} ${tablestruct[keys[i]]}, ";
+      initQuery += "${colnames[i]} ${tablestruct[colnames[i]]}, ";
     }
-    initQuery += "${keys[tlen-1]} ${tablestruct[keys[tlen - 1]]});";
+    initQuery += "${colnames[tlen-1]} ${tablestruct[colnames[tlen - 1]]});";
     // init database
     con = await openDatabase(
       path!, 
@@ -44,13 +49,23 @@ class FinancialDatabaseConnector extends FinancialDatabase {
           // When creating the db, create the table
           await db.execute(initQuery);
         });
+
+    List<Map<String, Object?>>? stuff = await con?.query(tablename, 
+      columns: [colnames[2]]
+    );
+
+    await Future.delayed(Duration(seconds: 2));
+
+    length = stuff?.length ?? 0;
+
   }
 
   bool get isNull => con == null ? true : false;
 
-  void insertDummy(int id) async {
+  Future<void> insertDummy(int id) async {
     length++;
     int? ids = await con?.insert("moneyactivity", {"amount": 0, "id": id, "date": 0});
+    print("Added");
   }
 
 
