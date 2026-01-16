@@ -64,8 +64,7 @@ class FinancialDatabaseConnector extends FinancialDatabase {
 
   Future<void> insertDummy(int id) async {
     length++;
-    int? ids = await con?.insert("moneyactivity", {"amount": 0, "id": id, "date": 0});
-    print("Added");
+    await con?.insert("moneyactivity", {"amount": 0, "id": id, "date": 0});
   }
 
 
