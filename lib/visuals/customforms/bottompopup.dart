@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 SnackBar getSnackbar(
   Icon setIcon,
-  String label, {
+  String label,
+  Color? color, {
     int duration = 2,
     double width = 400,
   }) {
@@ -26,6 +27,7 @@ return SnackBar(
   width: width,
   behavior: SnackBarBehavior.floating,
   duration: Duration(seconds: duration),
+  backgroundColor: color,
 );
 }
 

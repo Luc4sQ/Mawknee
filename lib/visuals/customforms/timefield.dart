@@ -8,9 +8,11 @@ class CupertinoScrollField extends StatefulWidget {
     required this.mode,
     required this.label, 
     required this.onFieldChanged,
-    super.key
+    super.key,
+    required this.coloraccent
   });
 
+  final Color coloraccent;
   final CupertinoDatePickerMode mode;
   final Function onFieldChanged;
   final String label;
@@ -62,8 +64,27 @@ class _CupertinoScrollFieldState extends State<CupertinoScrollField> {
           ),
         ),
         decoration: InputDecoration(
+          enabledBorder: OutlineInputBorder(
+            // width: 0.0 produces a thin "hairline" border
+            borderSide: BorderSide(
+              color: widget.coloraccent
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            // width: 0.0 produces a thin "hairline" border
+            borderSide: BorderSide(
+              color: widget.coloraccent,
+              width: 3
+            ),
+          ),
           border: OutlineInputBorder(), 
-          labelText: widget.label
+          labelText: widget.label,
+          labelStyle: TextStyle(
+            color: Colors.white
+          ),
+          floatingLabelStyle: TextStyle(
+            color: Colors.white
+          )
         ),
       ),
     );

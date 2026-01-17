@@ -9,6 +9,8 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static const Color coloraccent = Color.fromRGBO(27, 94, 32, 1);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -17,9 +19,12 @@ class MyApp extends StatelessWidget {
       initialRoute: "/home",
       routes: {
         "/home": (context) => MyHomePage(
-            title: "Mawknee"
+            title: "Mawknee",
+            coloraccent: coloraccent,
           ),
-        "/home/add": (context) => ManualActivityAdder()
+        "/home/add": (context) => ManualActivityAdder(
+          coloraccent: coloraccent,
+        )
       },
       theme: ThemeData(
         colorScheme: ColorScheme.dark(),

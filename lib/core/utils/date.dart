@@ -11,3 +11,11 @@ Map<String,String> getNormalizedDateTimeString(DateTime date) {
     "time": "$hour:$min"
   };
 }
+
+DateTime parseDateTimeString(String time, String date) {
+
+  List<String> datenumbers = date.split(".");
+  String rearrangedDate = "${datenumbers[2]}-${datenumbers[1]}-${datenumbers[0]}";
+
+  return DateTime.parse('$rearrangedDate $time:00Z');
+}
