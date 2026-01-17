@@ -9,12 +9,14 @@ abstract class FinancialDatabase {
   final List<String> colnames = [
     "amount",
     "date",
+    "metadata",
     "id"
   ];
   late final Map<String, String> tablestruct = {
     colnames[0]: "REAL",
     colnames[1]: "INTEGER",
-    colnames[2]: "INTEGER PRIMARY KEY"
+    colnames[2]: "TEXT",
+    colnames[3]: "INTEGER PRIMARY KEY"
   };
 
   String? path;
@@ -25,10 +27,10 @@ abstract class FinancialDatabase {
 class FinancialDatabaseConnector extends FinancialDatabase {
 
   Database? con;
-  int length = 0;
+  int entries = 0;
 
   // the name of the saved file
-  FinancialDatabaseConnector(super.name);
+  FinancialDatabaseConnector(super.name, {onUpdatedEntries});
 
   Future<void> initDatabase() async {
     // create path
@@ -44,30 +46,28 @@ class FinancialDatabaseConnector extends FinancialDatabase {
     con = await openDatabase(
       path!, 
       version: 1,
-      onCreate: 
-        (Database db, int version) async {
+      onCreate: (Database db, int version) async {
           // When creating the db, create the table
           await db.execute(initQuery);
-        });
-
-    List<Map<String, Object?>>? stuff = await con?.query(tablename, 
-      columns: [colnames[2]]
+      }
     );
 
-    await Future.delayed(Duration(seconds: 2));
-
-    length = stuff?.length ?? 0;
-
+    List<Map<String, Object?>>? stuff = await con?.query(tablename, 
+      columns: [colnames[3]]
+    );
+    entries = stuff?.length ?? 0;
   }
 
   bool get isNull => con == null ? true : false;
 
-  Future<void> insertDummy(int id) async {
-    length++;
-    await con?.insert("moneyactivity", {"amount": 0, "id": id, "date": 0});
+  Future<void> insertData(Map<String,Object?> data) async {
+    entries++;
+    await con?.insert("moneyactivity", data);
   }
 
-
+  Future<List<Map>> getData() async {
+    return await con!.query("moneyactivity", columns: colnames);
+  }
 }
 
 
