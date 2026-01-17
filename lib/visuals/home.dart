@@ -17,12 +17,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool loaded = false;
   int pageindex = 0;
 
-  void _incrementCounter() async {
-
-    await dbase.insertDummy(dbase.length);
-    setState(() {});
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +34,15 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+          style: TextStyle(
+            fontFamily: "IndahScript",
+            fontSize: 60,
+            color: Colors.green[600]
+          )
+        ),
+        centerTitle: true,
       ),
       body: <Widget>[
         Center(
@@ -63,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       ][pageindex],
       bottomNavigationBar: NavigationBar(
+        indicatorColor: Colors.green[900],
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         selectedIndex: pageindex,
         onDestinationSelected: (int index) {
@@ -73,17 +76,24 @@ class _MyHomePageState extends State<MyHomePage> {
         destinations: const <Widget> [
           NavigationDestination(
             icon: Icon(Icons.home_rounded), 
-            label: "Home"
+            label: "Home",
           ),
           NavigationDestination(
             icon: Icon(Icons.help_outline_sharp), 
             label: "Other")
         ]
       ),
-      floatingActionButton: pageindex == 0 ? FloatingActionButton(
-        onPressed: _incrementCounter,
+      floatingActionButton: pageindex == 0 ? FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, "/home/add");
+        },
+        label: Text(
+          "add activity",
+          style: TextStyle(color: Colors.white),
+        ),
         tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.green[900],
+        icon: const Icon(Icons.add, color: Colors.white),
       ) : null,
     );
   }

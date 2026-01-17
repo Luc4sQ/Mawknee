@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:mawknee/visuals/addactivity.dart";
 import "package:mawknee/visuals/home.dart";
 
 void main() {
@@ -13,10 +14,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      initialRoute: "/home",
+      routes: {
+        "/home": (context) => MyHomePage(
+            title: "Mawknee"
+          ),
+        "/home/add": (context) => ManualActivityAdder()
+      },
       theme: ThemeData(
         colorScheme: ColorScheme.dark(),
       ),
-      home: const MyHomePage(title: 'Mawknee'),
     );
   }
 }
