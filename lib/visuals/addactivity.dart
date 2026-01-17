@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import "package:mawknee/visuals/customforms/timefield.dart";
 import "package:mawknee/visuals/customforms/univfield.dart";
 import "package:mawknee/visuals/customforms/savebutton.dart";
+import "package:mawknee/visuals/customforms/bottompopup.dart";
 
 class ManualActivityAdder extends StatefulWidget {
   const ManualActivityAdder({super.key});
@@ -12,9 +13,12 @@ class ManualActivityAdder extends StatefulWidget {
 }
 
 class _ManualActivityAdderState extends State<ManualActivityAdder> {
-  TextEditingController datefield = TextEditingController();
-  TextEditingController timefield = TextEditingController();
   
+  String? date;
+  String? time;
+  double? amount;
+  String? reason;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,13 +32,21 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
         children: <Widget>[
           UniversalField(
             label: "type of activity", 
-            onFieldChanged: (test) {}, 
+            onFieldChanged: (act) {
+              reason = act;
+            }, 
             type: TextInputType.text
           ),
           // Second Field
           UniversalField(
             label: "amount of money",
-            onFieldChanged: (test) {}, 
+            onFieldChanged: (amount) {
+              String money = amount;
+              if(amount.contains(new RegExp(r',', caseSensitive: false))){
+                money = amount.replaceAll(",",".");
+              }
+              this.amount = double.parse(money);
+            }, 
             type: TextInputType.numberWithOptions(
               decimal: true
             ),
@@ -46,14 +58,18 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
                 child: CupertinoScrollField(
                   mode: CupertinoDatePickerMode.time,
                   label: "time", 
-                  onFieldChanged: (test) {}
+                  onFieldChanged: (time) {
+                    this.time = time;
+                  }
                 ),
               ),
               Flexible(
                 child: CupertinoScrollField(
                   mode: CupertinoDatePickerMode.date,
                   label: "date",
-                  onFieldChanged: (test) {},
+                  onFieldChanged: (date) {
+                    this.date = date;
+                  },
                 )
               ),
             ]
@@ -61,7 +77,39 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
           SaveButton(
             label: "save activity", 
             onPressed: () {
+              Icon myIcon = Icon(
+                Icons.warning_amber_rounded,
+                color: Colors.red[900],
+                size: 30,
+              );
+              for (var entry in [reason??"", date??"", time??""]) {
+                if (entry.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    getSnackbar(
+                      myIcon, 
+                      "Not all fields are filled!"
+                    )
+                  );
+                  return;
+                }
+              }
+              if ((amount ?? 0.0) == 0.0) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    getSnackbar(
+                      myIcon, 
+                      "The amount must be unequal to zero!"
+                    )
+                  );
+                  return;
+              }
 
+
+              Navigator.pop(context, [
+                reason??"",
+                amount??0,
+                date??"",
+                time??""
+              ]);
             }
           )
         ]
