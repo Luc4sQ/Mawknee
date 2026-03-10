@@ -18,10 +18,12 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       initialRoute: "/home",
       routes: {
+        // main route - here the program starts
         "/home": (context) => MyHomePage(
             title: "Mawknee",
             coloraccent: coloraccent,
           ),
+        // adding route - if you add a single entry
         "/home/add": (context) => ManualActivityAdder(
           coloraccent: coloraccent,
         )

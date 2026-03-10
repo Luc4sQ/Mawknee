@@ -1,5 +1,4 @@
 
-import "dart:math";
 
 import 'package:flutter/material.dart';
 import "package:mawknee/visuals/homesplit/barbar.dart";
@@ -112,7 +111,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             );
-          }   
+          } else {
+            return null;
+          }
         }
       ),
       Center(
