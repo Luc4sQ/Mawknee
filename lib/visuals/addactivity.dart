@@ -26,7 +26,7 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
 
   String? date;
   String? time;
-  double? amount;
+  int? amount;
   String? reason;
 
   @override
@@ -61,12 +61,15 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
             onFieldChanged: (amount) {
               String money = amount;
               if(amount.contains(RegExp(r',', caseSensitive: false))){
-                money = amount.replaceAll(",",".");
+                money = amount.replaceAll(",","");
               }
               if (money == "-" || money == "") {
                 return;
               }
-              this.amount = double.parse(money);
+              this.amount = int.parse(money);
+
+              amount = int.parse(money).toString();
+
             }, 
             type: TextInputType.numberWithOptions(
               decimal: true
@@ -118,7 +121,7 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
                   return;
                 }
               }
-              if ((amount ?? 0.0) == 0.0) {
+              if ((amount ?? 0) == 0) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     getSnackbar(
                       myIcon, 
@@ -136,6 +139,7 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
               Map<String,Object?> data = {
                 "amount": amount,
                 "date": parsedDate.millisecondsSinceEpoch,
+                "type": "single",
                 "metadata": reason,
                 "id": dbase.entries
               };
@@ -145,6 +149,7 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
               Map datas = {
                 "amount": amount,
                 "date": parsedDate.millisecondsSinceEpoch,
+                "type": "single",
                 "metadata": reason,
                 "id": dbase.entries
               };

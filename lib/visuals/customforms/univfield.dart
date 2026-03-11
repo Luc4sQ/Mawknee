@@ -51,9 +51,9 @@ class _UniversalFieldState extends State<UniversalField> {
           ),
           floatingLabelStyle: TextStyle(
             color: Colors.white
-          )
+          ),
         ),
-        onChanged: (string) => {
+        onChanged: (test) => {
           widget.onFieldChanged(fcontroller.text)
         },
       ),

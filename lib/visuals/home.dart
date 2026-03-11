@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import "package:mawknee/visuals/homesplit/mawnavigationbar.dart";
 import "package:mawknee/visuals/homesplit/mawmoneyviewrectangle.dart";

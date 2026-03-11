@@ -9,14 +9,16 @@ abstract class FinancialDatabase {
   final List<String> colnames = [
     "amount",
     "date",
+    "type",
     "metadata",
     "id"
   ];
   late final Map<String, String> tablestruct = {
-    colnames[0]: "REAL",
+    colnames[0]: "INTEGER",
     colnames[1]: "INTEGER",
     colnames[2]: "TEXT",
-    colnames[3]: "INTEGER PRIMARY KEY"
+    colnames[3]: "TEXT",
+    colnames[4]: "INTEGER PRIMARY KEY"
   };
 
   String? path;

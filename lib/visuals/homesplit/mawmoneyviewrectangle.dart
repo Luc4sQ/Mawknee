@@ -56,7 +56,7 @@ class _RectangleMoneyviewState extends State<RectangleMoneyview> {
                   child: ListTile(
                     style: ListTileStyle.list,
                     title: Text(widget.data[index].metadata??""),
-                    subtitle: Text("${widget.data[index].transaction.toString()} €"),
+                    subtitle: Text("${widget.data[index].decimalString} €"),
                     trailing: Text(widget.data[index].date.toString().replaceAll(":00.000", "")),
                   ),
                 ),
