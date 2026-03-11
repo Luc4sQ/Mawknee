@@ -36,6 +36,10 @@ class _BarBarState extends State<BarBar> {
           label: "Home",
         ),
         NavigationDestination(
+          icon: Icon(Icons.settings_suggest),
+          label: "schedules",
+        ),
+        NavigationDestination(
           icon: Icon(Icons.help_outline_sharp), 
           label: "Other")
       ]

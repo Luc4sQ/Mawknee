@@ -1,8 +1,8 @@
 
 
 import 'package:flutter/material.dart';
-import "package:mawknee/visuals/homesplit/barbar.dart";
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import "package:mawknee/visuals/homesplit/mawnavigationbar.dart";
+import "package:mawknee/visuals/homesplit/mawmoneyviewrectangle.dart";
 import "package:mawknee/database/databasehandler.dart";
 import "package:mawknee/core/moneyactivity.dart";
 
@@ -52,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       
+      // the header of the whole app (TODO: change to a more responsive design)
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(
@@ -67,63 +68,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // where all is shown
       body: <Widget>[
-        data.isEmpty ? Center(
-          child: LoadingAnimationWidget.twistingDots(
-            leftDotColor: const Color(0xFF1A1A3F),
-            rightDotColor: const Color(0xFFEA3799),
-            size: 200,
-          ),
-        ) : ListView.builder(
-        itemBuilder: (_,index) {
-          if (index < data.length){
-            return Padding(
-              padding: EdgeInsets.all(3),
-              child: Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                elevation: 3,
-                color: const Color.fromARGB(255, 19, 44, 19),
-                shadowColor: Colors.black,
-                child: ClipPath(
-                  clipper: ShapeBorderClipper(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      )
-                    ),
-                  child: Container(
-                    padding: const EdgeInsets.only(
-                      top: 0, bottom: 0, left: 0, right: 0),
-                    decoration:  BoxDecoration(
-                      border: Border(
-                        left: data[index].isIncome 
-                        ? BorderSide(color: Colors.green, width: 8)
-                        : BorderSide(color: Colors.red, width: 8),
-                      ),
-                    ),
-                    child: ListTile(
-                      style: ListTileStyle.list,
-                      title: Text(data[index].metadata??""),
-                      subtitle: Text("${data[index].transaction.toString()} €"),
-                      trailing: Text(data[index].date.toString().replaceAll(":00.000", "")),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          } else {
-            return null;
-          }
-        }
-      ),
-      Center(
-        child: Text(
-          "Still in development."
+        RectangleMoneyview(
+          data: data
+        ),
+        Text(""),
+        Center(
+          child: Text(
+            "Still in development."
+          )
         )
-      )
       ][pageindex],
 
-      // navigator
+      // custom navigationbar, which adjusts the index for the array above
       bottomNavigationBar: BarBar(
         coloraccent: widget.coloraccent, 
         onStateChanged: (ind) {
