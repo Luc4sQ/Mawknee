@@ -37,11 +37,11 @@ class _BarBarState extends State<BarBar> {
         ),
         NavigationDestination(
           icon: Icon(Icons.settings_suggest),
-          label: "schedules",
+          label: "Schedules",
         ),
         NavigationDestination(
-          icon: Icon(Icons.help_outline_sharp), 
-          label: "Other")
+          icon: Icon(Icons.star_half), 
+          label: "Statistics")
       ]
     );
   }
