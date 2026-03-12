@@ -24,6 +24,8 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
   FinancialDatabaseConnector dbase = FinancialDatabaseConnector("finance");
   bool loaded = false;
 
+  String editedAmount = "";
+
   String? date;
   String? time;
   int? amount;
@@ -47,6 +49,7 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
         // First Field
         children: <Widget>[
           UniversalField(
+            text: "",
             coloraccent: widget.coloraccent,
             label: "type of activity", 
             onFieldChanged: (act) {
@@ -55,25 +58,35 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
             type: TextInputType.text
           ),
           // Second Field
-          UniversalField(
-            coloraccent: widget.coloraccent,
-            label: "amount of money",
-            onFieldChanged: (amount) {
-              String money = amount;
-              if(amount.contains(RegExp(r',', caseSensitive: false))){
-                money = amount.replaceAll(",","");
-              }
-              if (money == "-" || money == "") {
-                return;
-              }
-              this.amount = int.parse(money);
-
-              amount = int.parse(money).toString();
-
-            }, 
-            type: TextInputType.numberWithOptions(
-              decimal: true
+          Focus(
+            child: UniversalField(
+              text: editedAmount,
+              coloraccent: widget.coloraccent,
+              label: "amount of money",
+              onFieldChanged: (amount) {
+                String money = amount;
+                if(amount.contains(RegExp(r',', caseSensitive: false))){
+                  money = amount.replaceAll(",","");
+                }
+                if (money == "-" || money == "") {
+                  return null;
+                }
+                this.amount = int.parse(money);
+            
+                editedAmount = int.parse(money).toString();
+            
+              }, 
+              type: TextInputType.numberWithOptions(
+                decimal: true
+              ),
             ),
+            onFocusChange: (isFocused) {
+              if (!isFocused) {
+                setState(() {
+                  
+                });
+              }
+            },
           ),
           // Third and fourth field
           Row(
@@ -157,7 +170,7 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
               Navigator.pop(context, datas);
             }
           )
-        ]
+        ],
       ),
     );
   }
