@@ -65,7 +65,7 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
           Focus(
             child: UniversalField(
               text: editedAmount,
-              inputformat: FilteringTextInputFormatter.allow(RegExp(r'^[0-9]+\,?[0-9]?[0-9]?')),
+              inputformat: FilteringTextInputFormatter.allow(RegExp(r'^\-?[0-9]+\,?[0-9]?[0-9]?')),
               coloraccent: widget.coloraccent,
               label: "amount of money",
               onFieldChanged: (amount) {
