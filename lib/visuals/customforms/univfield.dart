@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class UniversalField extends StatefulWidget {
   const UniversalField({
@@ -7,7 +8,8 @@ class UniversalField extends StatefulWidget {
     required this.onFieldChanged,
     required this.type,
     required this.coloraccent,
-    required this.text
+    required this.text,
+    required this.inputformat
   });
 
   final Color coloraccent;
@@ -15,6 +17,7 @@ class UniversalField extends StatefulWidget {
   final Function onFieldChanged;
   final TextInputType type;
   final String text;
+  final TextInputFormatter inputformat;
 
   @override
   State<UniversalField> createState() => _UniversalFieldState();
@@ -34,6 +37,7 @@ class _UniversalFieldState extends State<UniversalField> {
       child: TextField(
         cursorColor: Colors.white,
         controller: fcontroller,
+        inputFormatters: [widget.inputformat],
         keyboardType: widget.type,
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(

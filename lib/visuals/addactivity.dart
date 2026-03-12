@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import "package:flutter/services.dart";
 import "package:mawknee/core/utils/date.dart";
 import "package:mawknee/visuals/customforms/timefield.dart";
 import "package:mawknee/visuals/customforms/univfield.dart";
@@ -25,6 +26,7 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
   bool loaded = false;
 
   String editedAmount = "";
+  String editedMetadata = "";
 
   String? date;
   String? time;
@@ -49,11 +51,13 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
         // First Field
         children: <Widget>[
           UniversalField(
-            text: "",
+            text: editedMetadata,
+            inputformat: FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
             coloraccent: widget.coloraccent,
             label: "type of activity", 
             onFieldChanged: (act) {
-              reason = act;
+              editedMetadata = act;
+              reason = editedMetadata;
             }, 
             type: TextInputType.text
           ),
@@ -61,19 +65,21 @@ class _ManualActivityAdderState extends State<ManualActivityAdder> {
           Focus(
             child: UniversalField(
               text: editedAmount,
+              inputformat: FilteringTextInputFormatter.allow(RegExp(r'^[0-9]+\,?[0-9]?[0-9]?')),
               coloraccent: widget.coloraccent,
               label: "amount of money",
               onFieldChanged: (amount) {
                 String money = amount;
-                if(amount.contains(RegExp(r',', caseSensitive: false))){
-                  money = amount.replaceAll(",","");
+                if(!amount.contains(RegExp(r',', caseSensitive: false))){
+                  money = "$money,00";
+                } else if (amount.split(",")[1].length == 0 ) {
+                  money = "${money}00";
+                } else if (amount.split(",")[1].length == 1 ) {
+                  money = "${money}0";
                 }
-                if (money == "-" || money == "") {
-                  return null;
-                }
-                this.amount = int.parse(money);
+                this.amount = int.parse(money.replaceAll(",",""));
             
-                editedAmount = int.parse(money).toString();
+                editedAmount = money;
             
               }, 
               type: TextInputType.numberWithOptions(
