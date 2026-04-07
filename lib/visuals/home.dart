@@ -26,11 +26,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
   int pageindex = 0;
-  
+  String actionString = "";
 
 
   @override
   Widget build(BuildContext context) {
+
+    switch(pageindex) {
+      case 0:
+        actionString = "add activity";
+      case 1:
+        actionString = "add schedule";
+      default:
+        actionString = "";
+    }
+
 
     // init only, if not already initialize
     dbase.isNull ? dbase.initDatabase().then((notinst) async { 
@@ -88,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       // button to add new stuff
-      floatingActionButton: pageindex == 0 ? FloatingActionButton.extended(
+      floatingActionButton: actionString != "" ? FloatingActionButton.extended(
         onPressed: () async {
           dynamic rawdata = await Navigator.pushNamed(context, "/home/add");
           rawdata != null ? data.add(MoneyActivity(
@@ -103,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
         label: Text(
-          "add activity",
+          actionString,
           style: TextStyle(),//color: Colors.white),
         ),
         tooltip: 'Increment',
