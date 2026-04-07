@@ -1,5 +1,7 @@
-import "package:sqflite/sqflite.dart";
 import "package:path/path.dart";
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'dart:io' show Platform;
+
 
 
 abstract class FinancialDatabase {
@@ -35,24 +37,43 @@ class FinancialDatabaseConnector extends FinancialDatabase {
   FinancialDatabaseConnector(super.name, {onUpdatedEntries});
 
   Future<void> initDatabase() async {
+    sqfliteFfiInit();
+    var databaseFactory = databaseFactoryFfi;
     // create path
-    path = join(await getDatabasesPath(),"$name.db");
+    if(Platform.isAndroid){
+      path = join(await getDatabasesPath(),"$name.db");
+    } else {
+      path = join(await databaseFactory.getDatabasesPath(),"$name.db");
+    }
+    
     // create initial query
-    String initQuery = "CREATE TABLE $tablename (";
+    String initQuery = "CREATE TABLE IF NOT EXISTS $tablename (";
     int tlen = tablestruct.length;
     for (var i = 0; i < tlen - 1; i++) {
       initQuery += "${colnames[i]} ${tablestruct[colnames[i]]}, ";
     }
     initQuery += "${colnames[tlen-1]} ${tablestruct[colnames[tlen - 1]]});";
     // init database
-    con = await openDatabase(
-      path!, 
-      version: 1,
-      onCreate: (Database db, int version) async {
-          // When creating the db, create the table
-          await db.execute(initQuery);
-      }
-    );
+    
+    if(Platform.isAndroid) {
+      con = await openDatabase(
+        path!, 
+        version: 1,
+        onCreate: (Database db, int version) async {
+            // When creating the db, create the table
+            await db.execute(initQuery);
+        }
+      );
+    } else {
+      con = await databaseFactory.openDatabase(
+        path!,
+
+      );
+      
+      await con?.execute(
+        initQuery
+      );
+    }
 
     List<Map<String, Object?>>? stuff = await con?.query(tablename, 
       columns: [colnames[3]]
